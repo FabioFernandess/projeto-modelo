@@ -1,0 +1,5 @@
+\.ac-php-conf\.json
+vendor/
+var/*
+composer.lock
+database.json
