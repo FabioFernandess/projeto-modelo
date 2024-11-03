@@ -1,5 +1,5 @@
 \.ac-php-conf\.json
-vendor/
+/vendor/
 var/*
 composer.lock
 database.json
