@@ -6,44 +6,68 @@ namespace App\Controller;
 
 use Doctrine\ORM\EntityManager;
 use Monolog\Logger;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 
 final class AuthController
 {
-    public function __construct(
-        private Logger $logger,
-        private Twig $view,
-        private EntityManager $entityManager
-    ) {
+    protected $twig;
+    protected $container;
+
+    public function __construct(Twig $twig, ContainerInterface $container)
+    {
+        $this->twig = $twig;
+        $this->container = $container;
     }
 
-    public function login(Request $request, Response $response): Response
+    public function autenticar(Request $request, Response $response): Response
     {
+        // dd($request->getAttribute('session')['uinfo']);
         if ($request->getMethod() === 'POST') {
             $data = $request->getParsedBody();
 
-            if (empty($data['uname']) || empty($data['pswd'])) {
-                return $this->view->render($response, 'login.twig', ['flash' => ['Empty value in login/password'], 'uinfo' => $request->getAttribute('uinfo')]);
+            if (empty($data['username']) || empty($data['password'])) {
+                return $this->twig->render($response, 'login.twig', ['flash' => ['Empty value in login/password'], 'uinfo' => $request->getAttribute('uinfo')]);
             }
 
             // Check the user username / pass
-            $uinfo = $this->auth($data['uname'], $data['pswd']);
-            if ($uinfo === null) {
-                return $this->view->render($response, 'login.twig', ['flash' => ['Invalid login/password'], 'uinfo' => $request->getAttribute('uinfo')]);
-            }
+            // $uinfo = $this->auth($data['username'], $data['password']);
+            // if ($uinfo === null) {
+            //     return $this->view->render($response, 'login.twig', ['flash' => ['Invalid login/password'], 'uinfo' => $request->getAttribute('uinfo')]);
+            // }
 
-            $session = $request->getAttribute('session');
-            $session['logged'] = true;
-            $session['uinfo'] = [
-                'id' => $uinfo->getId(),
-                'firstname' => $uinfo->getFirstName(),
-                'lastname' => $uinfo->getLastName(),
-                'email' => $uinfo->getEmail(),
+            $_SESSION['logged'] = true;
+            $_SESSION['uinfo'] = [
+                'idUsuario' => 1,
+                'nome' => 'Jhon',
+                'idPerfilUsuario' => 1,
             ];
+            $tpRetorno = 'success';
+            $msgRetorno = '<strong><i class="fa fa-check"></i></strong> Login Efetuado com sucesso, Aguarde você será redirecionado!';
+            $codeStatus = 200;
+            $classRetorno = 'alert-success';
+            $retorno = [
+                'dados' => [
+                    'url' => '/usuario',
+                    'return' => $tpRetorno,
+                    'msg' => $msgRetorno,
+                    'msgExterna' => '',
+                    'class' => $classRetorno,
+                    'resetFormulario' => true
+                ],
+                'codeStatus' => $codeStatus
+            ];
+            // return $response->withStatus(200)->withHeader('Location', '/');
 
-            return $response->withStatus(302)->withHeader('Location', '/');
+            $data = array('name' => 'Bob', 'age' => 40);
+            $payload = json_encode($data);
+
+            $response->getBody()->write(json_encode($retorno['dados']));
+            $response->withStatus($retorno['codeStatus']);
+            return $response
+                ->withHeader('Content-Type', 'application/json');
         }
         return $this->view->render($response, 'login.twig', ['uinfo' => $request->getAttribute('uinfo')]);
     }

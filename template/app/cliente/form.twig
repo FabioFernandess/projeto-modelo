@@ -1,0 +1,142 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+	<div class="container-xxl flex-grow-1 container-p-y">
+
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb breadcrumb-style1">
+				<li class="breadcrumb-item">
+					<a href="{{ url_for('app.home.index') }}">Início</a>
+				</li>
+				<li class="breadcrumb-item">
+					<a href="{{ url_for('app.cliente.index') }}">Cliente</a>
+				</li>
+				<li class="breadcrumb-item active">Cadastro</li>
+			</ol>
+		</nav>
+
+		<form name="formulario" id="formulario" method="{{config.method}}" action="javascript:;" url="{{ url_for(config.action) }}" enctype="application/x-www-form-urlencoded">
+    
+			<div class="row">
+				<div class="col-xxl">
+					<div class="card mb-6">
+						<div class="card-header d-flex align-items-center justify-content-between">
+							<h5 class="mb-0">Cadastro de Cliente</h5>
+						</div>
+						<div class="card-body">
+							<form>
+								<div class="row mb-6">
+									<label class="col-sm-2 col-form-label" for="numrCpfCnpj">CPF/CNPJ</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="numrCpfCnpj" name="numrCpfCnpj">
+									</div>
+								</div>
+
+								<div class="row mb-6 inputNomeCliente">
+									<label class="col-sm-2 col-form-label" for="nomeCliente">Nome</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="nomeCliente" name="nomeCliente">
+									</div>
+								</div>
+
+								<div class="row mb-6 inputNomeFantasia">
+									<label class="col-sm-2 col-form-label" for="nomeFantasia">Nome Fantasia</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="nomeFantasia" name="nomeFantasia">
+									</div>
+								</div>
+
+								<div class="row mb-6 inputRazaoSocial">
+									<label class="col-sm-2 col-form-label" for="razaoSocial">Razão Social</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="razaoSocial" name="razaoSocial">
+									</div>
+								</div>
+
+								<div class="row mb-6 inputInscricaoEstadual">
+									<label class="col-sm-2 col-form-label" for="inscricaoEstadual">Inscrição Estadual</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inscricaoEstadual" name="inscricaoEstadual">
+									</div>
+								</div>
+
+								<div class="row mb-6 inputInscricaoMunicipal">
+									<label class="col-sm-2 col-form-label" for="inscricaoMunicipal">Inscrição Municipal</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="inscricaoMunicipal" name="inscricaoMunicipal">
+									</div>
+								</div>
+
+								<div class="row mb-6">
+									<label class="col-sm-2 col-form-label" for="numrTelefone">Telefone</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="numrTelefone" name="numrTelefone">
+									</div>
+									<label class="col-sm-2 col-form-label" for="email">Email</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="email" name="email">
+									</div>
+								</div>
+
+								<div class="divider">
+									<div class="divider-text">Endereço</div>
+								</div>
+
+								<div class="row mb-6">
+									<label class="col-sm-2 col-form-label" for="cep">CEP</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="cep" name="cep">
+									</div>
+								</div>
+
+								<div class="row mb-6">
+									<label class="col-sm-2 ol-form-label" for="estado">Estado</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="estado" name="estado">
+									</div>
+
+									<label class="col-sm-2 col-form-label" for="municipio">Município</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="municipio" name="municipio">
+									</div>
+								</div>
+
+								<div class="row mb-6">
+									<label class="col-sm-2 ol-form-label" for="bairro">Bairro</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="bairro" name="bairro">
+									</div>
+
+									<label class="col-sm-2 col-form-label" for="numero">Número</label>
+									<div class="col-sm-4">
+										<input type="text" class="form-control" id="numero" name="numero">
+									</div>
+								</div>
+
+								<div class="row mb-6">
+									<label class="col-sm-2 col-form-label" for="complemento">Complemento</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="complemento" name="complemento">
+									</div>
+								</div>
+
+								<input type="hidden" name="{{token.nameKey}}" value="{{token.name}}">
+								<input type="hidden" name="{{token.valueKey}}" value="{{token.value}}">
+
+								<div class="row justify-content-end">
+									<div class="col-sm-10">
+										<button type="submit" class="btn btn-primary btnSalvar" onclick="submitForm('formulario', 'btnEnviar')">Salvar</button>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+{% endblock %}
+
+{% block javascript %}
+	 <script src="{{ asset('js/app/cliente/form.js') }}"></script>
+{% endblock %}

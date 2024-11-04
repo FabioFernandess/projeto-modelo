@@ -2,16 +2,46 @@
 
 declare(strict_types=1);
 
-use App\Services\Settings;
+use App\Service\Settings;
 use Monolog\Level;
+use Symfony\Component\Dotenv\Dotenv;
 
-$debug = $_SERVER['APP_ENV'] === 'dev';
-$docker = getenv('DOCKER_MODE', true) === 'true';
 
-$json = file_get_contents(Settings::getAppRoot().DIRECTORY_SEPARATOR.'database.json');
+$json = file_get_contents(Settings::getAppRoot() . DIRECTORY_SEPARATOR . 'database.json');
 $database = json_decode($json);
+if (!isset($_SERVER['APP_ENV'])) {
+    if (!class_exists(Dotenv::class)) {
+        throw new \RuntimeException('APP_ENV environment variable is not defined. You need to define environment variables for configuration or add "symfony/dotenv" as a Composer dependency to load variables from a .env file.');
+    }
 
+
+
+    if ($database->APP_AMBIENTE == 'desenv') {
+        (new Dotenv())->load(__DIR__ . '/../.env_des');
+    } elseif ($database->APP_AMBIENTE == 'test') {
+        (new Dotenv())->load(__DIR__ . '/../.env_test');
+    } elseif ($database->APP_AMBIENTE == 'homolog') {
+        (new Dotenv())->load(__DIR__ . '/../.env_hom');
+    } else {
+        (new Dotenv())->load(__DIR__ . '/../.env');
+    }
+}
+$environment = $_SERVER['APP_ENV'] ?? 'dev';
+$debug = $environment === 'dev';
+$docker = getenv('DOCKER_MODE', true) === 'true';
+// dd($database->APP_DATABASE_DRIVER);
+
+$connection = [
+    'driver' => $database->APP_DATABASE_DRIVER,
+    'host' => $database->APP_DATABASE_HOST,
+    'port' => $database->APP_DATABASE_PORT,
+    'dbname' => $database->APP_DATABASE_DATABASE,
+    'user' => $database->APP_DATABASE_USERNAME,
+    'password' => $database->APP_DATABASE_PASSWORD,
+    'charset' => 'utf-8'
+];
 return [
+    'environment' => $environment,
     // Is debug moderm
     'debug' => $debug,
     // 'Temprorary directory
@@ -21,15 +51,7 @@ return [
     // doctrine settings
     'doctrine' => [
         'entity_path' => [Settings::getAppRoot() . '/src/Entity'],
-        'connection' => [
-            'driver' => $database->APP_DATABASE_DRIVER,
-            'host' => $database->APP_DATABASE_HOST,
-            'port' => $database->APP_DATABASE_PORT,
-            'dbname' => $database->APP_DATABASE_DATABASE,
-            'user' => $database->APP_DATABASE_USERNAME,
-            'password' => $database->APP_DATABASE_PASSWORD,
-            'charset' => 'utf-8'
-        ],
+        'connection' => $connection,
         'migrations' => [
             'table_storage' => [
                 'table_name' => 'db_version',
@@ -45,15 +67,14 @@ return [
             'transactional' => true,
             'check_database_platform' => true,
             'organize_migrations' => 'none',
-            'connection' => null,
+            'connection' => $connection,
             'em' => null,
             'custom_template' => Settings::getAppRoot() . '/migrations/doctrine_migrations_class.php.tpl',
         ],
     ],
-    
     // View settings
     'view' => [
-        'template_path' => Settings::getAppRoot() .  '/tmpl',
+        'template_path' => Settings::getAppRoot() .  '/template',
         'twig' => [
             'cache' => Settings::getAppRoot() . '/var/cache/twig',
             'debug' => $debug,
@@ -119,4 +140,5 @@ return [
             ],
         ],
     ],
+    'constantes' => require Settings::getAppRoot() . '/config/constantes.php',
 ];

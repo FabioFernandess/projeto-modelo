@@ -1,0 +1,17 @@
+.jquery-loading-base-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  z-index: 9999;
+  opacity: 0.8;
+  background: #747474;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  font-weight: bold;
+  color: white;
+}

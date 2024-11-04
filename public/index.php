@@ -1,44 +1,66 @@
 <?php
 
-use App\Application;
-use Symfony\Component\Dotenv\Dotenv;
+declare(strict_types=1);
 
-session_start();
+use App\Middleware\AclMiddleware;
+use App\Service\Settings;
+use DI\ContainerBuilder;
+use Slim\App;
 
-require __DIR__.'/../vendor/autoload.php';
+// Set the absolute path to the root directory.
+$rootPath = realpath(__DIR__ . '/..');
 
+// Include the composer autoloader.
+include_once $rootPath . '/vendor/autoload.php';
 
-if (!isset($_SERVER['APP_ENV'])) {
-    if (!class_exists(Dotenv::class)) {
-        throw new \RuntimeException('APP_ENV environment variable is not defined. You need to define environment variables for configuration or add "symfony/dotenv" as a Composer dependency to load variables from a .env file.');
-    }
+// At this point the container has not been built. We need to load the settings manually.
+$settings = Settings::load();
 
-    $json = file_get_contents(__DIR__ . '/../database.json');
-    $database = json_decode($json);
+// DI Builder
+$containerBuilder = new ContainerBuilder();
 
-    if ($database->APP_AMBIENTE == 'desenv') {
-        (new Dotenv())->load(__DIR__ . '/../.env_des');
-    } elseif ($database->APP_AMBIENTE == 'test') {
-        (new Dotenv())->load(__DIR__ . '/../.env_test');
-    } elseif ($database->APP_AMBIENTE == 'homolog') {
-        (new Dotenv())->load(__DIR__ . '/../.env_hom');
-    } else {
-        (new Dotenv())->load(__DIR__ . '/../.env');
-    }
+if (! $settings->get('debug')) {
+    // Compile and cache container.
+    $containerBuilder->enableCompilation($settings->get('cache_dir').'/container');
 }
-global $app;
-$app = new Application($_SERVER['APP_ENV'] ?? 'dev');
 
-$app->options('/{routes:.+}', function ($request, $response, $args) {
-    return $response;
+// Set up dependencies
+$containerBuilder->addDefinitions($rootPath.'/config/dependencies.php');
+
+// Build PHP-DI Container instance
+$container = $containerBuilder->build();
+
+// Instantiate the app
+$app = \DI\Bridge\Slim\Bridge::create($container);
+
+$container->set(App::class, function () use($app) {
+    return $app;
 });
+// Register middleware
+$authMiddleware = new AclMiddleware($container);
+$app->add($authMiddleware);
 
-// $app->add(function ($req, $res, $next) {
-//     $response = $next($req, $res);
-//     return $response
-//             ->withHeader('Access-Control-Allow-Origin', '*')
-//             ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-//             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-// });
 
+
+// Register middleware
+$middleware = require $rootPath . '/config/middleware.php';
+$middleware($app);
+
+// Register routes
+$routes = require $rootPath . '/config/routes.php';
+$routes($app);
+
+// Set the cache file for the routes. Note that you have to delete this file
+// whenever you change the routes.
+if (! $settings->get('debug')) {
+    $app->getRouteCollector()->setCacheFile($settings->get('cache_dir').'/route');
+}
+
+// Add the routing middleware.
+$app->addRoutingMiddleware();
+
+// Add Body Parsing Middleware
+$app->addBodyParsingMiddleware();
+
+// Run the app
 $app->run();

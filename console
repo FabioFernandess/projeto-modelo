@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-use App\Services\Settings;
+use App\Service\Settings;
 use DI\ContainerBuilder;
 use Doctrine\Migrations\Configuration\EntityManager\ExistingEntityManager;
 use Doctrine\Migrations\Configuration\Migration\ConfigurationArray;

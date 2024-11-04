@@ -4,42 +4,37 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Services\TesteService;
-use DI\ContainerBuilder;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ResponseInterface;
-use Psr\Log\LoggerInterface;
-use Slim\Psr7\Request;
-use Slim\Psr7\Response;
+use Doctrine\ORM\EntityManager;
+use Monolog\Logger;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Views\Twig;
 
 final class HomeController
 {
-    protected $twig;
+    public function __construct(
+        private Logger $logger,
+        private Twig $view,
+        private EntityManager $entityManager
+    ) {
+    }
 
-    protected $container;
-
-    public function __construct(Twig $twig,ContainerInterface $container)
+    public function index(Request $request, Response $response): Response
     {
-        $this->twig = $twig;
-        $this->container = $container;
+        $this->logger->info('Home page action dispatched');
 
+        return $this->view->render($response, 'index.twig');
     }
 
-
-    public function __invoke(Request $request, Response $response, string $name = ''): ResponseInterface
+    public function apiInfo(Request $request, Response $response): Response
     {
-        return $this->twig->render($response, 'homepage.html.twig', [
-            'name' => $name
-        ]);
+        return $this->view->render($response, 'api.twig');
     }
 
-    public function index(Request $request, Response $response){
-        dd($this->container->get('usuarioService')->buscarUsuarios());
-        return $this->twig->render($response, 'login.twig', [
-            'name' => ''
-        ]);
+    public function error(Request $request, Response $response): Response
+    {
+        $this->logger->info('Error log');
+
+        throw new \Slim\Exception\HttpInternalServerErrorException($request, 'Try error handler');
     }
-
-
 }

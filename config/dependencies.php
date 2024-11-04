@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Services\Settings;
-use App\Twig\AssetExtension;
+use App\Service\AuthService;
+use App\Service\PerfilUsuarioFuncdeService;
+use App\Service\Settings;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Monolog\Handler\StreamHandler;
@@ -12,6 +13,8 @@ use Monolog\Processor\UidProcessor;
 use Slim\Views\Twig;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\PhpFilesAdapter;
+use App\Twig\AssetExtension;
+
 return [
     // Doctrine Dbal connection
     \Doctrine\DBAL\Connection::class => static function (Settings $settings, Doctrine\ORM\Configuration $conf): Doctrine\DBAL\Connection {
@@ -60,19 +63,24 @@ return [
 
         return $logger;
     },
-    Twig::class =>  function (Settings $settings, \Twig\Profiler\Profile $profile){
+    Twig::class => static function (Settings $settings, \Twig\Profiler\Profile $profile): Twig {
         $view = Twig::create($settings->get('view.template_path'), $settings->get('view.twig'));
-        $view->addExtension(new AssetExtension($settings->getAppRoot()));
         if ($settings->get('debug')) {
             // Add extensions
             $view->addExtension(new \Twig\Extension\ProfilerExtension($profile));
             $view->addExtension(new \Twig\Extension\DebugExtension());
         }
+        $view->addExtension(new AssetExtension(''));
 
         return $view;
     },
-    'teste'=>function(){
-        dd('oi');
+    AuthService::class=>function($container){
+        return new AuthService($container);
+    },
+    'constante'=> static function (Settings $settings){
+        return $settings->get('constantes');
+    },
+    PerfilUsuarioFuncdeService::class => function($container){
+        return new PerfilUsuarioFuncdeService($container);
     }
-    
 ];
