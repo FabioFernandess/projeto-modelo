@@ -1,0 +1,123 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+
+	<div class="container-xxl flex-grow-1 container-p-y">
+
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb breadcrumb-style1">
+				<li class="breadcrumb-item">
+					<a href="{{ url_for('app.home.index') }}">Início</a>
+				</li>
+				<li class="breadcrumb-item">
+					<a href="{{ url_for('app.usuario.index') }}">Usuario</a>
+				</li>
+				<li class="breadcrumb-item active">Cadastro</li>
+			</ol>
+		</nav>
+
+		<form name="formulario" id="formulario" method="{{config.method}}" action="javascript:;" url="{{ url_for(config.action) }}" enctype="application/x-www-form-urlencoded">
+			<div class="row">
+				<div class="col-xl-12">
+					<div class="nav-align-top nav-tabs-shadow mb-6">
+						<ul class="nav nav-tabs nav-fill" role="tablist">
+							<li class="nav-item" role="presentation">
+								<button type="button" class="nav-link active" role="tab" data-bs-toggle="tab" data-bs-target="#dadosUsuario" aria-controls="dadosUsuario" aria-selected="true">
+									<span class="d-none d-sm-block">
+										Dados do Usuário
+									</span>
+									<i class="bx bx-home bx-sm d-sm-none"></i>
+								</button>
+							</li>
+							<li class="nav-item" role="presentation">
+								<button type="button" class="nav-link" role="tab" data-bs-toggle="tab" data-bs-target="#dadosPerfil" aria-controls="dadosPerfil" aria-selected="false" tabindex="-1">
+									<span class="d-none d-sm-block">
+										Perfil</span>
+									<i class="bx bx-user bx-sm d-sm-none"></i>
+								</button>
+							</li>
+						</ul>
+						<div class="tab-content">
+							<div class="tab-pane fade active show" id="dadosUsuario" role="tabpanel">
+								<div class="row mb-6">
+									<label class="col-sm-2 col-form-label" for="nomeUsuario">Nome</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="nomeUsuario" name="nomeUsuario">
+									</div>
+								</div>
+
+								<div class="row mb-6 ">
+									<label class="col-sm-2 col-form-label" for="username">Username</label>
+									<div class="col-sm-10">
+										<input type="text" class="form-control" id="username" name="username">
+									</div>
+								</div>
+
+								<div class="mb-6">
+									<div class="form-password-toggle">
+										<div class="row">
+											<label class="col-sm-2 form-label col-form-label" for="password">Senha</label>
+											<div class="col-sm-10">
+												<div class="input-group">
+													<input type="password" class="form-control" id="password" aria-describedby="iconViewPass"/>
+													<span id="iconViewPass" class="input-group-text cursor-pointer">
+														<i class="bx bx-hide"></i>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="mb-6">
+									<div class="form-password-toggle">
+										<div class="row">
+											<label class="col-sm-2 form-label col-form-label" for="confirmaPassword">Confirmar Senha</label>
+											<div class="col-sm-10">
+												<div class="input-group">
+													<input type="password" class="form-control" id="confirmaPassword" aria-describedby="iconViewConfirmPass"/>
+													<span id="iconViewConfirmPass" class="input-group-text cursor-pointer">
+														<i class="bx bx-hide"></i>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+
+								<input type="hidden" name="{{token.nameKey}}" value="{{token.name}}">
+								<input type="hidden" name="{{token.valueKey}}" value="{{token.value}}">
+
+								<div class="row justify-content-end">
+									<div class="col-sm-10">
+										<button type="submit" class="btn btn-primary btnSalvar" onclick="submitForm('formulario', 'btnEnviar')">Salvar</button>
+									</div>
+								</div>
+
+							</div>
+							<div class="tab-pane fade" id="dadosPerfil" role="tabpanel">
+								<p>
+									Donut dragée jelly pie halvah. Danish gingerbread bonbon cookie wafer candy oat cake ice
+																																																																								                          cream. Gummies halvah tootsie roll muffin biscuit icing dessert gingerbread. Pastry ice cream
+																																																																								                          cheesecake fruitcake.
+								</p>
+								<p class="mb-0">
+									Jelly-o jelly beans icing pastry cake cake lemon drops. Muffin muffin pie tiramisu halvah
+																																																																								                          cotton candy liquorice caramels.
+								</p>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</form>
+	</div>
+{% endblock %}
+
+{% block javascript %}
+	 <script src="{{ asset('js/app/cliente/form.js') }}"></script>
+{% endblock %}

@@ -19,13 +19,14 @@ return static function (App $app): void {
     $app->get('/500', callable: [\App\Controller\HomeController::class, 'index'])->setName('app.home.index');
 
 
-    $app->get('/usuario', [\App\Controller\HomeController::class, 'index'])->setName('app.usuario.index');
-    $app->get('/usuario/post', [\App\Controller\HomeController::class, 'create'])->setName('home');
-    $app->get('/usuario/put', [\App\Controller\HomeController::class, 'create'])->setName('home');
-    $app->get('/usuario/get', [\App\Controller\HomeController::class, 'create'])->setName('home');
-    $app->get('/usuario/create', [\App\Controller\HomeController::class, 'create'])->setName('home');
-    $app->get('/usuario/delete', [\App\Controller\HomeController::class, 'delete'])->setName('home');
-    $app->get('/usuario/save', [\App\Controller\HomeController::class, 'save'])->setName('home');
+    $app->get('/usuario', [\App\Controller\UsuarioController::class, 'index'])->setName('app.usuario.index');
+    $app->get('/usuario/post', [\App\Controller\UsuarioController::class, 'post'])->setName('app.usuario.post');
+    $app->get('/usuario/put', [\App\Controller\UsuarioController::class, 'put'])->setName('app.usuario.put');
+    $app->get('/usuario/get', [\App\Controller\UsuarioController::class, 'get'])->setName('app.usuario.get');
+    $app->get('/usuario/create', [\App\Controller\UsuarioController::class, 'create'])->setName('app.usuario.create');
+    $app->get('/usuario/edit[/{id}]', [\App\Controller\UsuarioController::class, 'edit'])->setName('app.usuario.edit');
+    $app->get('/usuario/delete', [\App\Controller\UsuarioController::class, 'delete'])->setName('app.usuario.delete');
+    $app->get('/usuario/save', [\App\Controller\UsuarioController::class, 'save'])->setName('app.usuario.save');
 
     // $app->get('/api_info', [\App\Controller\HomeController::class, 'apiInfo'])->setName('apiInfo');
     // $app->get('/error', [\App\Controller\HomeController::class, 'error'])->setName('error');

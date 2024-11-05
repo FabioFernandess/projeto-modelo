@@ -55,6 +55,7 @@ class AuthService
                         }
                         if ($func['operacao'] == 'incluir') {
                            
+                            $rotasPermitidas[] = $func['descUrl'] . '/create';
                             $rotasPermitidas[] = $func['descUrl'] . '/post';
                         }
 

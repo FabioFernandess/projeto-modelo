@@ -1,0 +1,50 @@
+{% extends 'layout.twig' %}
+
+{% block content %}
+	<div class="container-xxl flex-grow-1 container-p-y">
+
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb breadcrumb-style1">
+				<li class="breadcrumb-item">
+					<a href="{{ url_for('app.home.index') }}">Início</a>
+				</li>
+				<li class="breadcrumb-item">
+					<a href="{{ url_for('app.usuario.index') }}">Usuario</a>
+				</li>
+				<li class="breadcrumb-item active">Listagem</li>
+			</ol>
+		</nav>
+
+		<div class="nav-align-top">
+			<ul class="nav nav-pills flex-column flex-md-row mb-6">
+				<li class="nav-item">
+					<a class="nav-link active" href="{{ url_for('app.usuario.create') }}">
+						<i class="bx bx-sm bx-plus me-1_5"></i>
+						Novo</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="pages-account-settings-notifications.html">
+						<i class="bx bx-sm bxs-file-export me-1_5"></i>
+						Exportar</a>
+				</li>
+				
+			</ul>
+		</div>
+
+		<div class="card">
+			<h5 class="card-header">Listagem de Usuários</h5>
+			<div class="table-responsive text-nowrap">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Nome</th>
+							<th>Perfil</th>
+							<th>Ações</th>
+						</tr>
+					</thead>
+					<tbody class="table-border-bottom-0"></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}
