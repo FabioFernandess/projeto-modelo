@@ -20,6 +20,15 @@ return static function (App $app): void {
 
     $app->add(new \RKA\Middleware\ProxyDetection());
 
+    $app->add(
+        new \Slim\Middleware\Session([
+          'name' => 'dummy_session',
+          'autorefresh' => true,
+          'lifetime' => '1 hour',
+        ])
+      );
+      
+
     // Add error handling middleware.
     if ($settings->get('debug')) {
         $app->add(new SlimTracy\Middlewares\TracyMiddleware($app, $settings->get('tracy')));

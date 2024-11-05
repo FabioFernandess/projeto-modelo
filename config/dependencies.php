@@ -80,7 +80,13 @@ return [
     'constante'=> static function (Settings $settings){
         return $settings->get('constantes');
     },
+    'menu'=>static function (Settings $settings){
+        return $settings->get('menu');
+    },
     PerfilUsuarioFuncdeService::class => function($container){
         return new PerfilUsuarioFuncdeService($container);
+    },
+    'session'=>function(){
+        return new \SlimSession\Helper();
     }
 ];

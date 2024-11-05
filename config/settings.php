@@ -141,4 +141,5 @@ return [
         ],
     ],
     'constantes' => require Settings::getAppRoot() . '/config/constantes.php',
+    'menu' => require Settings::getAppRoot() . '/config/menu.php'
 ];

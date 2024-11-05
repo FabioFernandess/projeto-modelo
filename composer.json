@@ -43,7 +43,8 @@
         "symfony/asset": "^7.1",
         "symfony/dotenv": "^7.1",
         "symfony/var-dumper": "^7.1",
-        "geggleto/psr7-acl": "^1.3"
+        "geggleto/psr7-acl": "^1.3",
+        "bryanjhv/slim-session": "^4.1"
     },
 	"require-dev": {
         "nunomaduro/phpinsights": "^2.11",

@@ -19,7 +19,7 @@ return static function (App $app): void {
     $app->get('/500', callable: [\App\Controller\HomeController::class, 'index'])->setName('app.home.index');
 
 
-    $app->get('/usuario', [\App\Controller\HomeController::class, 'index'])->setName('home');
+    $app->get('/usuario', [\App\Controller\HomeController::class, 'index'])->setName('app.usuario.index');
     $app->get('/usuario/post', [\App\Controller\HomeController::class, 'create'])->setName('home');
     $app->get('/usuario/put', [\App\Controller\HomeController::class, 'create'])->setName('home');
     $app->get('/usuario/get', [\App\Controller\HomeController::class, 'create'])->setName('home');

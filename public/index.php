@@ -3,9 +3,11 @@
 declare(strict_types=1);
 
 use App\Middleware\AclMiddleware;
+use App\Service\PerfilUsuarioFuncdeService;
 use App\Service\Settings;
 use DI\ContainerBuilder;
 use Slim\App;
+use Slim\Views\Twig;
 
 // Set the absolute path to the root directory.
 $rootPath = realpath(__DIR__ . '/..');
@@ -41,7 +43,6 @@ $authMiddleware = new AclMiddleware($container);
 $app->add($authMiddleware);
 
 
-
 // Register middleware
 $middleware = require $rootPath . '/config/middleware.php';
 $middleware($app);
@@ -49,6 +50,8 @@ $middleware($app);
 // Register routes
 $routes = require $rootPath . '/config/routes.php';
 $routes($app);
+
+$container->get(Twig::class)->getEnvironment()->addGlobal('menu', $container->get(PerfilUsuarioFuncdeService::class)->menuUsuario());
 
 // Set the cache file for the routes. Note that you have to delete this file
 // whenever you change the routes.

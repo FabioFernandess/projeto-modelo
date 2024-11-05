@@ -89,8 +89,9 @@ class AclMiddleware
              return $handler->handle($request);
          } else {
              $statusCode = $request->getMethod() == 'GET' ? 301 : 403;
-             if ($_SESSION['uinfo'] == null) {
-                 $response->getBody()->write($this->container->get(Twig::class)->fetch('login.twig'));
+            //  dd($this->container->get('session')->get('uinfo'));
+             if ($this->container->get('session')->get('uinfo') == null) {
+                $response->getBody()->write($this->container->get(Twig::class)->fetch('login.twig'));
                  return $response->withStatus(200);
              }
              $response->getBody()->write($this->container->get(Twig::class)->fetch('403.twig'));

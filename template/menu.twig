@@ -1,0 +1,35 @@
+<ul class="menu-inner py-1">
+	{% for key,men in menu %}
+
+		{% if (men.sub_menu|length > 0) %}
+			<li class="menu-item">
+				<a href="javascript:void(0);" class="menu-link menu-toggle">
+					<i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+					<div class="text-truncate" data-i18n="{{men.title}}">{{men.title}}</div>
+				</a>
+				<ul class="menu-sub">
+
+
+					{% for key1,men1 in men.sub_menu %}
+
+						<li class="menu-item {% if men1.page == page %} active {% endif %}">
+							<a href="{{url_for(men1.page)}}" class="menu-link">
+								<div class="text-truncate" data-i18n="Basic">{{men1.title}}</div>
+							</a>
+						</li>
+					{% endfor %}
+				</ul>
+
+			</li>
+
+		{% else %}
+			<li class="menu-item {% if men.page == page %} active {% endif %}">
+				<a href="{{url_for(men.page)}}" class="menu-link">
+					<i class="menu-icon tf-icons bx bx-collection"></i>
+					<div class="text-truncate" data-i18n="Basic">{{men.title}}</div>
+				</a>
+			</li>
+		{% endif %}
+	{% endfor %}
+
+</ul>

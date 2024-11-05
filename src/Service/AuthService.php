@@ -35,13 +35,10 @@ class AuthService
         /**
          * PERMISSÕES USUÁRIO
          */
-        $sessionUsuario = null;
-        if(isset( $_SESSION['uinfo'] )){
-            $sessionUsuario = $_SESSION['uinfo'];
-        }
+        $sessionUsuario =  $this->container->get('session')->get('uinfo');
         $funcionalidadesLiberadas = $this->container->get('constante')['FUNCIONALIDADE_LIBERADAS'];
         if ($sessionUsuario != null) {
-            $roles[] = $sessionUsuario['idPerfilUsuario'];
+            $roles[] = $sessionUsuario['idPerfil'];
             $rotasPermitidas[] = '/home';
 
             $permissaoFuncionalidade = $this->container->get(PerfilUsuarioFuncdeService::class)->permissaoFuncionalidade(null,$sessionUsuario['idUsuario'], false, null, null);
@@ -77,7 +74,7 @@ class AuthService
             //            print_r($rotasPermitidas);
             //            echo '</pre>';
             //            die();
-            $allow[$sessionUsuario['idPerfilUsuario']] = $rotasPermitidas;
+            $allow[$sessionUsuario['idPerfil']] = $rotasPermitidas;
         }
         /*
          * Permissões

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Doctrine\ORM\EntityManager;
-use Monolog\Logger;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -24,7 +22,6 @@ final class AuthController
 
     public function autenticar(Request $request, Response $response): Response
     {
-        // dd($request->getAttribute('session')['uinfo']);
         if ($request->getMethod() === 'POST') {
             $data = $request->getParsedBody();
 
@@ -38,12 +35,12 @@ final class AuthController
             //     return $this->view->render($response, 'login.twig', ['flash' => ['Invalid login/password'], 'uinfo' => $request->getAttribute('uinfo')]);
             // }
 
-            $_SESSION['logged'] = true;
-            $_SESSION['uinfo'] = [
+            $this->container->get('session')->set('uinfo', [
                 'idUsuario' => 1,
-                'nome' => 'Jhon',
-                'idPerfilUsuario' => 1,
-            ];
+                'nomeUsuario' => 'Jhon',
+                'idPerfil' => 1
+            ]);
+
             $tpRetorno = 'success';
             $msgRetorno = '<strong><i class="fa fa-check"></i></strong> Login Efetuado com sucesso, Aguarde você será redirecionado!';
             $codeStatus = 200;
